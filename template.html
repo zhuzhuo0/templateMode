@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Js模板原理</title>
+	<style type='text/css'>
+		*{padding: 0;margin: 0;}
+		#container{
+			border: 1px solid #ccc;
+		}
+		.person{
+			width: 100px;
+			height: 100px;
+			text-align: center;
+			display: inline-block;
+		}
+		.person p{
+			line-height: 25px;
+			height: 25px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+	<!-- JS模板 -->
+	<script type='tempalte' id='template'>
+		<div class="person">
+			<p>{{name}}</p>
+			<p>{{age}}</p>
+			<p>{{sex}}</p>
+		</div>	
+	</script>
+	<script>
+		//数据
+		var data = [
+		{
+			name:'zhuzhu01',
+			age:'18',
+			sex:'male'
+		},
+		{
+			name:'zhuzhu02',
+			age:'19',
+			sex:'male'
+		},
+		{
+			name:'zhuzhu03',
+			age:'20',
+			sex:'male'
+		},
+		{
+			name:'zhuzhu04',
+			age:'21',
+			sex:'male'
+		},
+		{
+			name:'zhuzhu05',
+			age:'22',
+			sex:'male'
+		},
+		{
+			name:'zhuzhu06',
+			age:'23',
+			sex:'female'
+		}
+		];
+		console.log(data);
+		var template = document.getElementById('template').innerText;
+		var container = document.getElementById('container');
+		// 模板引擎
+		// var myTemplate = function(data,template){
+		// 	var str = '';
+		// 	for(var obj in data){
+		// 		str += template.replace(/\{\{name\}\}/,data[obj].name)
+		// 			.replace(/\{\{age\}\}/,data[obj].age)
+		// 			.replace(/\{\{sex\}\}/,data[obj].sex);
+		// 	}
+		// 	container.innerHTML = str;
+		// }
+		// myTemplate(data,template);
+		// a && b : 将a, b转换为Boolean类型, 再执行逻辑与, true返回b, false返回a 
+		// a || b : 将a, b转换为Boolean类型, 再执行逻辑或, true返回a, false返回b 
+		// 转换规则: 
+		// 对象为true 
+		// 非零数字为true 
+		// 非空字符串为true 
+		// 其他为false 
+		var myTemplate = function(data,template){
+			var str = '';
+			function replace(obj){
+				var objstr = '';
+				for(var key in obj){
+					var reg = new RegExp('{{'+key+'}}','ig');
+					console.log(Boolean(objstr),Boolean(template),objstr||template);
+					objstr = (objstr||template).replace(reg,obj[key]);
+				}
+				return objstr;
+			}
+			for(var i = 0; i < data.length ; i++){
+				str += replace(data[i]);
+			}
+			return str;
+		}
+		container.innerHTML = myTemplate(data,template);
+	</script>
+</body>
+</html>
